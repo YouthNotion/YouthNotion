@@ -11,11 +11,14 @@ export function getStaticPaths() {
 }
 
 const { role } = Astro.props as { role: Role };
+const isInternship = role.employment === "internship";
 ---
 
 <BaseLayout
-  title={`${role.title} (${role.location}, ${role.duration})`}
-  description={`${role.title} at Youth Notion: ${role.location.toLowerCase()} internship, ${role.duration}, with a path to a junior role. Apply on WhatsApp.`}
+  title={`${role.title} – ${role.location}, ${isInternship ? role.duration : "Full-time"}`}
+  description={isInternship
+    ? `${role.title} at Youth Notion: ${role.location.toLowerCase()} internship, ${role.duration}, with a path to a junior role. Apply on WhatsApp.`
+    : `${role.title} at Youth Notion: full-time, ${role.location.toLowerCase()} role${role.terms.includes("Mentorship included") ? " with mentorship" : ""}. Apply on WhatsApp.`}
 >
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(jobPosting(role))} />
 
@@ -25,7 +28,7 @@ const { role } = Astro.props as { role: Role };
         <span class="posting__arrow"><Icon name="arrow-right" size={16} /></span>
         All openings
       </a>
-      <RoleCard role={role} heading="h1" />
+      <RoleCard role={role} />
     </div>
   </section>
 </BaseLayout>

@@ -22,6 +22,9 @@ Youth Notion aims to help young people become self-reliant, responsible citizens
 - Careers: https://youthnotion.orgs.bd/careers
 - Web Engineering Intern: https://youthnotion.orgs.bd/careers/web-engineering-intern
 - Systems Engineering Intern: https://youthnotion.orgs.bd/careers/systems-engineering-intern
+- Digital Communications Intern: https://youthnotion.orgs.bd/careers/digital-communications-intern
+- Junior Systems Engineer (ROS): https://youthnotion.orgs.bd/careers/junior-systems-engineer
+- Full-Stack Engineer: https://youthnotion.orgs.bd/careers/full-stack-engineer
 
 ## Official profiles
 

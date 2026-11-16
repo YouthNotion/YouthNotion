@@ -1,0 +1,93 @@
+---
+// A compact posting for the Careers list: title and tags only. The whole card
+// links to the role's own page, which has the full details and Apply button.
+import Icon from "@/components/ui/Icon.astro";
+import { roleFacts, type Role } from "@/data/careers";
+
+interface Props {
+  role: Role;
+}
+
+const { role } = Astro.props;
+---
+
+<article class="role-link chamfer">
+  <div class="role-link__text">
+    <h3><a href={`/careers/${role.slug}`}>{role.title}</a></h3>
+    <ul role="list">{roleFacts(role).map((fact) => <li>{fact}</li>)}</ul>
+  </div>
+  <span class="role-link__arrow" aria-hidden="true"><Icon name="arrow-right" size={20} /></span>
+</article>
+
+<style>
+  .role-link {
+    --cut: 16px;
+    --chamfer-line: rgb(168 220 92 / 0.38);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem clamp(1.1rem, 2.6vw, 2rem);
+  }
+
+  .role-link:hover,
+  .role-link:focus-within {
+    --chamfer-fill: var(--surface-2);
+  }
+
+  .role-link__text {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  h3 {
+    color: var(--lime);
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  /* The title's link covers the whole card, so anywhere on it opens the role. */
+  h3 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  li {
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--line-strong);
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .role-link__arrow {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line-strong);
+    color: var(--lime);
+    /* Its hover slide lifts it above the card's link layer, so let clicks pass through. */
+    pointer-events: none;
+    transition:
+      transform 0.3s var(--ease-out),
+      background-color 0.2s,
+      color 0.2s;
+  }
+
+  .role-link:hover .role-link__arrow {
+    background: var(--lime);
+    border-color: var(--lime);
+    color: var(--ink);
+    transform: translateX(3px);
+  }
+</style>

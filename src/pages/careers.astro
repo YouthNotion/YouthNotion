@@ -3,13 +3,13 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import PageHero from "@/components/ui/PageHero.astro";
 import StairsArt from "@/components/ui/hero-art/StairsArt.astro";
 import Icon from "@/components/ui/Icon.astro";
-import RoleCard from "@/components/sections/careers/RoleCard.astro";
+import RoleLink from "@/components/sections/careers/RoleLink.astro";
 import { roles, tracks } from "@/data/careers";
 ---
 
 <BaseLayout
   title="Internships and Careers at Youth Notion"
-  description="Three-month internships in web engineering and systems engineering at Youth Notion, with a path to a junior role. Apply on WhatsApp."
+  description="Internships and full-time roles at Youth Notion across engineering and social media. Apply on WhatsApp."
 >
   <PageHero
     eyebrow="Careers at Youth Notion"
@@ -45,7 +45,7 @@ import { roles, tracks } from "@/data/careers";
         <p class="lede">
           {
             roles.length
-              ? "Three-month internships with hours adjusted around your studies or job. Interns who perform well will be considered for a junior role."
+              ? "No years-of-experience or degree cut-offs: show us what you’ve built. Interns who perform well will be considered for a junior role."
               : "We’ll share internship and junior openings here as roles are finalized."
           }
         </p>
@@ -56,7 +56,7 @@ import { roles, tracks } from "@/data/careers";
           <ul class="roles" role="list" data-reveal-stagger>
             {roles.map((role) => (
               <li>
-                <RoleCard role={role} />
+                <RoleLink role={role} />
               </li>
             ))}
           </ul>

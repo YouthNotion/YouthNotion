@@ -1,23 +1,19 @@
 ---
-// One job posting, always fully visible so it can be read, screenshotted and crawled.
+// A role's full posting, shown on its own page: always fully visible so it can be read, screenshotted and crawled.
 import Button from "@/components/ui/Button.astro";
-import { applyLink, internshipTerms, type Role } from "@/data/careers";
+import { applyLink, roleFacts, type Role } from "@/data/careers";
 
 interface Props {
   role: Role;
-  /** "h1" on the role's own page, where the title also stops being a link. */
-  heading?: "h1" | "h3";
 }
 
-const { role, heading: Heading = "h3" } = Astro.props;
-const facts = [role.duration, role.location, ...internshipTerms, role.pay].filter(Boolean);
+const { role } = Astro.props;
+const facts = roleFacts(role);
 ---
 
 <article class="role chamfer" id={role.slug}>
   <header class="role__head">
-    <Heading class="role__title">
-      {Heading === "h3" ? <a href={`/careers/${role.slug}`}>{role.title}</a> : role.title}
-    </Heading>
+    <h1 class="role__title">{role.title}</h1>
     <div class="role__apply">
       <Button href={applyLink(role)} external icon="whatsapp" flipCorners>
         Apply<span class="sr-only"> for {role.title} on WhatsApp</span>
@@ -73,10 +69,6 @@ const facts = [role.duration, role.location, ...internshipTerms, role.pay].filte
     line-height: 1.15;
   }
 
-  .role__title a:hover {
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-  }
 
   .role__facts {
     display: flex;
