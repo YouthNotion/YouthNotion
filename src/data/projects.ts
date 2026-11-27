@@ -2,7 +2,7 @@ import type { ImageMetadata } from "astro";
 import sunagorikLogo from "@/assets/projects/sunagorik-mark.png";
 
 export type Project = {
-  slug: "terra" | "sunagorik" | "barios";
+  slug: "terra" | "sunagorik" | "barios" | "aeroaid";
   name: string;
   /** Short label shown above the name. */
   field: string;
@@ -21,12 +21,13 @@ export type Project = {
   audience: string[];
 };
 
-export const projects: Project[] = [
+const projectList: Project[] = [
   {
     slug: "terra",
     name: "Project TERRA",
     field: "Environmental response",
-    summary: "Tracking and Environmental Real-time Response Apparatus.",
+    summary:
+      "An automated flood intelligence network: a solar-backed sensor grid streams live water level, weather and air-quality data for early warning.",
     href: "https://youthnotion.github.io/TERRA/",
     accent: "var(--teal)",
     tagline: "Automated flood intelligence network. Data saves lives.",
@@ -49,7 +50,8 @@ export const projects: Project[] = [
     slug: "sunagorik",
     name: "Project Sunagorik",
     field: "Civic awareness",
-    summary: "Promoting civic awareness and community engagement among youth.",
+    summary:
+      "A civic engagement platform for Bangladesh: citizens report and resolve community issues, backed by real-time environmental monitoring.",
     href: "https://youthnotion.github.io/sunagorik",
     logo: sunagorikLogo,
     accent: "var(--lime)",
@@ -91,6 +93,32 @@ export const projects: Project[] = [
     ],
     audience: ["Tenants", "Landlords"],
   },
+  {
+    slug: "aeroaid",
+    name: "Project AeroAid",
+    field: "Community health",
+    summary:
+      "A blood donor network for Bangladesh's aviation community: find donors by blood group and area, and send requests in a few taps.",
+    href: "https://aero-aid.com",
+    accent: "var(--red)",
+    tagline: "No one in our aviation community left in need.",
+    about:
+      "AeroAid connects aviation students and airline professionals across Bangladesh as blood donors, so help is quick to find during a medical emergency, in Dhaka and beyond.",
+    stats: [
+      { value: "8", label: "Blood groups searchable" },
+      { value: "63", label: "Dhaka areas covered" },
+    ],
+    highlights: [
+      { title: "Donor search", text: "Find donors by blood group and area for quick local matches." },
+      { title: "Donation requests", text: "Ask a donor directly and track requests you've sent." },
+      { title: "Donation history", text: "Donors log past donations and set their availability." },
+      { title: "Secure by design", text: "Email-code sign-in and row-level security protect personal data." },
+    ],
+    audience: ["Aviation students", "Airline professionals", "Community members"],
+  },
 ];
+
+/** Every project, alphabetically by name. Pages, the footer and the hero animations all use this order. */
+export const projects = [...projectList].sort((a, b) => a.name.localeCompare(b.name, "en", { sensitivity: "base" }));
 
 export const projectBySlug = (slug: Project["slug"]) => projects.find((project) => project.slug === slug)!;

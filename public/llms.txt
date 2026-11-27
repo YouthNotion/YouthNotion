@@ -8,9 +8,10 @@ Youth Notion aims to help young people become self-reliant, responsible citizens
 
 ## Projects
 
-- Project TERRA (Tracking and Environmental Real-time Response Apparatus): https://youthnotion.github.io/TERRA/
-- Project Sunagorik (civic awareness and community engagement among youth): https://youthnotion.github.io/sunagorik
+- Project AeroAid (a blood donor network for Bangladesh's aviation community): https://aero-aid.com
 - Project BariOS (a mobile-first rental OS for Bangladesh): https://bari-os.com
+- Project Sunagorik (civic awareness and community engagement among youth): https://youthnotion.github.io/sunagorik
+- Project TERRA (Tracking and Environmental Real-time Response Apparatus): https://youthnotion.github.io/TERRA/
 
 ## Main pages
 

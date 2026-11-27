@@ -34,7 +34,7 @@ const ticks = Array.from({ length: 48 }, (_, i) => i * 7.5);
   <ul class="emblem__orbit" role="list">
     {
       projects.map((project, index) => (
-        <li style={{ "--angle": `${index * 120 - 90}deg`, "--accent": project.accent }}>
+        <li style={{ "--angle": `${(index * 360) / projects.length - 90}deg`, "--accent": project.accent }}>
           <span class="emblem__satellite">
             <ProjectMark project={project} size={76} />
           </span>
