@@ -1,0 +1,105 @@
+---
+import { site } from "@/data/site";
+
+const { registration } = site;
+const details = [
+  { label: "Registration number", value: registration.number, lang: "bn", note: registration.numberEn },
+  { label: "Date of registration", value: registration.dateLabel },
+  { label: "Issued by", value: registration.authority, note: `${registration.office}, ${registration.government}` },
+  { label: "Legal basis", value: `${registration.actSection}, ${registration.act}`, note: `${registration.rulesSection}, ${registration.rules}` },
+];
+---
+
+<section class="section registration" id="registration" aria-labelledby="registration-title">
+  <div class="container">
+    <div class="registration__panel chamfer" data-reveal>
+      <div class="registration__intro">
+        <p class="eyebrow">Official registration</p>
+        <h2 id="registration-title" class="title">Registered with the Government of Bangladesh.</h2>
+        <p class="lede">
+          Youth Notion is a registered youth organisation, certified by the {registration.authority} under the
+          {" "}{registration.act}.
+        </p>
+      </div>
+
+      <dl class="registration__details">
+        {
+          details.map((detail) => (
+            <div>
+              <dt>{detail.label}</dt>
+              <dd>
+                <span lang={detail.lang}>{detail.value}</span>
+                {detail.note && <small>{detail.note}</small>}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .registration {
+    padding-top: 0;
+  }
+
+  .registration__panel {
+    --cut: 24px;
+    --chamfer-line: rgb(168 220 92 / 0.38);
+    display: grid;
+    gap: 2rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  @media (min-width: 960px) {
+    .registration__panel {
+      grid-template-columns: 1fr 1.2fr;
+      align-items: center;
+      gap: 3rem;
+    }
+  }
+
+  .registration__intro {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .registration__details {
+    display: grid;
+    gap: 1.1rem 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .registration__details {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .registration__details div {
+    padding-left: 0.8rem;
+    border-left: 2px solid var(--lime);
+  }
+
+  dt {
+    color: var(--faint);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    display: grid;
+    gap: 0.2rem;
+    margin-top: 0.35rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  dd small {
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+</style>

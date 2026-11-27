@@ -15,6 +15,20 @@ export const site = {
     countryCode: "BD",
   },
   whatsapp: { label: "+880 1787-600900", href: "https://wa.me/8801787600900" },
+  /** Government registration certificate (নিবন্ধন সনদ). The Bangla number is as issued; the English one is our rendering of it. */
+  registration: {
+    number: "যুউঅ/নোয়া-০৫৩",
+    numberEn: "DYD/Noakhali-053",
+    date: "2024-10-27",
+    dateLabel: "27 October 2024",
+    authority: "Department of Youth Development",
+    government: "Government of the People's Republic of Bangladesh",
+    office: "Office of the Deputy Director, Noakhali",
+    act: "Youth Organisation (Registration and Operation) Act, 2015",
+    actSection: "Section 4",
+    rules: "Youth Organisation (Registration and Operation) Rules, 2017",
+    rulesSection: "Rule 3(4)",
+  },
 };
 
 export const navigation = [
