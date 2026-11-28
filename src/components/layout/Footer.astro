@@ -19,8 +19,21 @@ const { address, registration } = site;
         </h2>
       </div>
       <div class="footer__cta-actions">
-        <Button href={site.whatsapp.href} external icon="whatsapp">Message us on WhatsApp</Button>
-        <p class="footer__phone">{site.whatsapp.label}</p>
+        <div class="footer__cta-buttons">
+          <Button href={site.whatsapp.href} external icon="whatsapp">Message us on WhatsApp</Button>
+          <Button href={site.email.href} variant="ghost" icon="mail">Email us</Button>
+        </div>
+        <p class="footer__phone">
+          {site.whatsapp.label}<span aria-hidden="true"> · </span><button
+            type="button"
+            class="footer__copy"
+            data-copy={site.email.label}
+            title="Copy email address"
+          >
+            {site.email.label}<span class="sr-only"> (copy to clipboard)</span>
+            <span class="footer__copied" aria-live="polite"></span>
+          </button>
+        </p>
       </div>
     </section>
 
@@ -34,9 +47,8 @@ const { address, registration } = site;
               <li>
                 <a
                   href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Youth Notion on ${social.name}`}
+                  {...(social.href.startsWith("https://") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  aria-label={social.icon === "mail" ? `Email Youth Notion` : `Youth Notion on ${social.name}`}
                 >
                   <Icon name={social.icon} size={18} />
                 </a>
@@ -97,6 +109,38 @@ const { address, registration } = site;
   <p class="footer__giant" aria-hidden="true">YOUTH NOTION</p>
 </footer>
 
+<script>
+  // Clicking the email address copies it instead of opening a mail app;
+  // the "Email us" button is there for that.
+  document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((button) => {
+    const status = button.querySelector<HTMLElement>(".footer__copied");
+    let timer: number | undefined;
+
+    button.addEventListener("click", async () => {
+      const text = button.dataset.copy ?? "";
+      let copied = false;
+      try {
+        await navigator.clipboard.writeText(text);
+        copied = true;
+      } catch {
+        // Older browsers or non-secure pages: fall back to a hidden textarea.
+        const field = document.createElement("textarea");
+        field.value = text;
+        field.setAttribute("readonly", "");
+        field.style.cssText = "position:fixed;opacity:0";
+        document.body.append(field);
+        field.select();
+        copied = document.execCommand("copy");
+        field.remove();
+      }
+      if (!status) return;
+      status.textContent = copied ? "Copied" : "Couldn't copy";
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => (status.textContent = ""), 1800);
+    });
+  });
+</script>
+
 <style>
   .footer {
     position: relative;
@@ -126,10 +170,56 @@ const { address, registration } = site;
     gap: 0.75rem;
   }
 
+  .footer__cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
   .footer__phone {
     color: var(--faint);
     font-family: var(--font-mono);
     font-size: 0.8rem;
+    overflow-wrap: anywhere;
+  }
+
+  .footer__copy {
+    position: relative;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: copy;
+    transition: color 0.2s;
+  }
+
+  .footer__copy:hover,
+  .footer__copy:focus-visible {
+    color: var(--lime);
+  }
+
+  /* "Copied" tag that appears under the address for a moment after a click. */
+  .footer__copied {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 0;
+    padding: 0.2rem 0.5rem;
+    background: var(--lime);
+    color: var(--ink);
+    font-size: 0.7rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+
+  .footer__copied:not(:empty) {
+    opacity: 1;
+    transform: none;
   }
 
   @media (min-width: 900px) {
@@ -140,6 +230,15 @@ const { address, registration } = site;
 
     .footer__cta-actions {
       align-items: flex-end;
+    }
+
+    .footer__cta-buttons {
+      justify-content: flex-end;
+    }
+
+    .footer__copied {
+      left: auto;
+      right: 0;
     }
   }
 
