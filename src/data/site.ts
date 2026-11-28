@@ -15,6 +15,7 @@ export const site = {
     countryCode: "BD",
   },
   whatsapp: { label: "+880 1787-600900", href: "https://wa.me/8801787600900" },
+  email: { label: "contact@youthnotion.orgs.bd", href: "mailto:contact@youthnotion.orgs.bd" },
   /** Government registration certificate (নিবন্ধন সনদ). The Bangla number is as issued; the English one is our rendering of it. */
   registration: {
     number: "যুউঅ/নোয়া-০৫৩",
@@ -39,10 +40,11 @@ export const navigation = [
   { label: "Careers", href: "/careers" },
 ];
 
-export type Social = { name: string; href: string; icon: "facebook" | "linkedin" | "whatsapp" };
+export type Social = { name: string; href: string; icon: "facebook" | "linkedin" | "whatsapp" | "mail" };
 
 export const socials: Social[] = [
   { name: "Facebook", href: "https://www.facebook.com/youthnotion", icon: "facebook" },
   { name: "LinkedIn", href: "https://www.linkedin.com/company/youthnotion/", icon: "linkedin" },
   { name: "WhatsApp", href: site.whatsapp.href, icon: "whatsapp" },
+  { name: "Email", href: site.email.href, icon: "mail" },
 ];
