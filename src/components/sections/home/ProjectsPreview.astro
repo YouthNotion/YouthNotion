@@ -19,9 +19,9 @@ import { projects } from "@/data/projects";
 
     <ul class="projects" role="list" data-reveal-stagger>
       {
-        projects.map((project, index) => (
+        projects.map((project) => (
           <li>
-            <ProjectCard project={project} index={index} />
+            <ProjectCard project={project} />
           </li>
         ))
       }
@@ -43,9 +43,16 @@ import { projects } from "@/data/projects";
     gap: 1rem;
   }
 
-  @media (min-width: 900px) {
+  /* Two by two on tablets, then every project in one row on wide screens. */
+  @media (min-width: 640px) {
     .projects {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .projects {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 

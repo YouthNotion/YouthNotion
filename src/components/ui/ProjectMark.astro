@@ -25,6 +25,13 @@ const { project, size = 48 } = Astro.props;
         <circle class="t-sensor" cx="32" cy="27" r="3" />
         <path class="t-signal" d="M32 15v5m-5-2a7 7 0 0 0-3 3m13-3a7 7 0 0 1 3 3" />
       </svg>
+    ) : project.slug === "aeroaid" ? (
+      <svg viewBox="40.5 31.5 110 110" aria-hidden="true">
+        <circle class="a-ring" cx="95.5" cy="86.5" r="55" />
+        <circle class="a-disc" cx="95.5" cy="86.5" r="55" />
+        <path class="a-plane" d="M95.5 49 132.4 113H58.6Z" />
+        <path class="a-cross" d="M90 69h12v12h12v12h-12v12H90V93H78V81h12Z" />
+      </svg>
     ) : project.slug === "barios" ? (
       <svg viewBox="216 124 592 776" aria-hidden="true">
         <polygon class="b-trace" pathLength="1" points="512,144 787,302 787,722 512,880 236,722 236,302" />
@@ -140,6 +147,72 @@ const { project, size = 48 } = Astro.props;
     50% {
       opacity: 1;
       transform: scale(1.18);
+    }
+  }
+
+  /* ---- AeroAid: the cross beats twice and a ring pings out, as on its own site ---- */
+
+  .a-disc {
+    fill: #d40001;
+  }
+
+  .a-plane {
+    fill: #fff;
+    stroke: #fff;
+    stroke-width: 8;
+    stroke-linejoin: round;
+  }
+
+  .a-cross {
+    fill: #d40001;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: aeroaid-beat 2.4s ease-out infinite;
+  }
+
+  .a-ring {
+    fill: none;
+    stroke: #ff4646;
+    stroke-width: 3;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: aeroaid-ping 2.4s ease-out infinite;
+  }
+
+  @keyframes aeroaid-beat {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    6% {
+      transform: scale(1.2);
+    }
+
+    15% {
+      transform: scale(1);
+    }
+
+    20% {
+      transform: scale(1.1);
+    }
+
+    31% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes aeroaid-ping {
+    0% {
+      opacity: 0.55;
+      transform: scale(1);
+    }
+
+    54%,
+    100% {
+      opacity: 0;
+      transform: scale(1.45);
     }
   }
 

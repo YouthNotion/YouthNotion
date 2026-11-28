@@ -1,15 +1,26 @@
 ---
-// Projects: an engineering drawing that sketches itself. A flood wave for TERRA,
-// a civic pulse for Sunagorik and a hexagon for BariOS, all on one shared line.
-import { projectBySlug } from "@/data/projects";
+// Projects: an engineering drawing that sketches itself, with one station per
+// project on a shared line. It reads the project list, so a new project appears
+// automatically: known projects get their own drawing, others a plain octagon.
+import { projects } from "@/data/projects";
 
-const terra = projectBySlug("terra");
-const sunagorik = projectBySlug("sunagorik");
-const barios = projectBySlug("barios");
+const TOP = 72;
+// Leaves room below the last station for the tallest drawing (TERRA's double wave) above the ruler.
+const BOTTOM = 416;
+const GLYPH_X = 80;
+const LABEL_X = 315;
 
-const short = (name: string) => name.replace("Project ", "");
+const stations = projects.map((project, index) => ({
+  project,
+  short: project.name.replace("Project ", ""),
+  y: projects.length === 1 ? (TOP + BOTTOM) / 2 : TOP + (index * (BOTTOM - TOP)) / (projects.length - 1),
+  // Each station starts drawing a little after the one above it.
+  d: 0.5 + index * 0.9,
+}));
+
 const corners = ["M18 46V18H46", "M454 18H482V46", "M482 454V482H454", "M46 482H18V454"];
 const ticks = Array.from({ length: 21 }, (_, i) => 50 + i * 20);
+const bus = `M36 ${TOP - 32}V${BOTTOM}`;
 ---
 
 <svg class="blueprint" viewBox="0 0 500 500">
@@ -18,44 +29,56 @@ const ticks = Array.from({ length: 21 }, (_, i) => 50 + i * 20);
     {ticks.map((x, i) => <line x1={x} y1="482" x2={x} y2={i % 5 === 0 ? 472 : 477} />)}
   </g>
 
-  <path class="draw bus" pathLength="1" d="M36 60V400" style="--d: 0" />
-  <path class="draw branch" pathLength="1" d="M36 118H58" style="--d: 0.5" />
-  <path class="draw branch" pathLength="1" d="M36 262H198" style="--d: 0.9" />
-  <path class="draw branch" pathLength="1" d="M36 400H92" style="--d: 1.3" />
-  <path class="blueprint__run" pathLength="1" d="M36 60V400" />
-  {[118, 262, 400].map((y) => <rect class="blueprint__joint" x="32" y={y - 4} width="8" height="8" />)}
+  <path class="draw bus" pathLength="1" d={bus} style="--d: 0" />
+  <path class="blueprint__run" pathLength="1" d={bus} />
 
-  <g style={{ "--c": terra.accent }}>
-    <path class="draw stroke" pathLength="1" d="M58 118C98 86 138 86 178 118S258 150 298 118" style="--d: 1" />
-    <path class="draw stroke faint" pathLength="1" d="M58 142C98 110 138 110 178 142S258 174 298 142" style="--d: 1.4" />
-    <path class="draw stroke faint" pathLength="1" d="M178 60V110" style="--d: 1.8" />
-    <circle class="ping" cx="178" cy="56" r="14" />
-    <circle class="solid" cx="178" cy="56" r="4.5" />
-    <g class="note" style="--d: 2.2">
-      <text class="note__title" x="316" y="116">01 {short(terra.name)}</text>
-      <text class="note__text" x="316" y="134">{terra.field}</text>
-    </g>
-  </g>
+  {
+    stations.map(({ project, short, y, d }) => (
+      <g style={{ "--c": project.accent }}>
+        <path class="draw branch" pathLength="1" d={`M36 ${y}H${GLYPH_X - 2}`} style={{ "--d": d }} />
+        <rect class="blueprint__joint" x="32" y={y - 4} width="8" height="8" />
 
-  <g style={{ "--c": sunagorik.accent }}>
-    <path class="draw stroke" pathLength="1" d="M198 262H272L288 226L310 304L328 244L340 262H462" style="--d: 2" />
-    <circle class="ping" cx="462" cy="262" r="14" style="animation-delay: 1.2s" />
-    <circle class="solid" cx="462" cy="262" r="4.5" />
-    <g class="note" style="--d: 3">
-      <text class="note__title" x="60" y="244">02 {short(sunagorik.name)}</text>
-      <text class="note__text" x="60" y="284">{sunagorik.field}</text>
-    </g>
-  </g>
+        <g transform={`translate(${GLYPH_X} ${y})`}>
+          {project.slug === "terra" ? (
+            <>
+              <path class="draw stroke" pathLength="1" d="M0 0C33 -26 67 -26 100 0S167 26 200 0" style={{ "--d": d + 0.4 }} />
+              <path class="draw stroke faint" pathLength="1" d="M0 18C33 -8 67 -8 100 18S167 44 200 18" style={{ "--d": d + 0.7 }} />
+              <path class="draw stroke faint" pathLength="1" d="M100 -38V-10" style={{ "--d": d + 0.9 }} />
+              <circle class="ping" cx="100" cy="-42" r="12" />
+              <circle class="solid" cx="100" cy="-42" r="4" />
+            </>
+          ) : project.slug === "sunagorik" ? (
+            <>
+              <path class="draw stroke" pathLength="1" d="M0 0H70L84 -30L102 34L118 -20L128 0H200" style={{ "--d": d + 0.4 }} />
+              <circle class="ping" cx="200" cy="0" r="12" style="animation-delay: 1.2s" />
+              <circle class="solid" cx="200" cy="0" r="4" />
+            </>
+          ) : project.slug === "barios" ? (
+            <>
+              <polygon class="draw stroke" pathLength="1" points="60,-36 91,-18 91,18 60,36 29,18 29,-18" style={{ "--d": d + 0.4 }} />
+              <polygon class="draw stroke faint" pathLength="1" points="60,-20 77,-10 77,10 60,20 43,10 43,-10" style={{ "--d": d + 0.8 }} />
+              <path class="draw stroke faint" pathLength="1" d="M0 0H29M91 0H200" style={{ "--d": d + 1 }} />
+            </>
+          ) : project.slug === "aeroaid" ? (
+            <>
+              <circle class="ping" cx="60" cy="0" r="30" style="animation-delay: 0.6s" />
+              <circle class="draw stroke" pathLength="1" cx="60" cy="0" r="30" style={{ "--d": d + 0.4 }} />
+              <path class="draw stroke faint" pathLength="1" d="M60 -19 77 13H43Z" style={{ "--d": d + 0.8 }} />
+              <path class="draw stroke beat" pathLength="1" d="M60 -9V9M51 0H69" style={{ "--d": d + 1 }} />
+              <path class="draw stroke faint" pathLength="1" d="M0 0H30M90 0H124L132 -14L142 14L150 0H200" style={{ "--d": d + 1.1 }} />
+            </>
+          ) : (
+            <polygon class="draw stroke" pathLength="1" points="48,-30 72,-30 90,-12 90,12 72,30 48,30 30,12 30,-12" style={{ "--d": d + 0.4 }} />
+          )}
+        </g>
 
-  <g style={{ "--c": barios.accent }}>
-    <polygon class="draw stroke" pathLength="1" points="150,328 212,364 212,436 150,472 88,436 88,364" style="--d: 3" />
-    <polygon class="draw stroke faint" pathLength="1" points="150,356 188,378 188,422 150,444 112,422 112,378" style="--d: 3.5" />
-    <path class="draw stroke faint" pathLength="1" d="M212 400H250" style="--d: 3.9" />
-    <g class="note" style="--d: 4.2">
-      <text class="note__title" x="262" y="396">03 {short(barios.name)}</text>
-      <text class="note__text" x="262" y="414">{barios.field}</text>
-    </g>
-  </g>
+        <g class="note" style={{ "--d": d + 1.2 }}>
+          <text class="note__title" x={LABEL_X} y={y - 3}>{short}</text>
+          <text class="note__text" x={LABEL_X} y={y + 15}>{project.field}</text>
+        </g>
+      </g>
+    ))
+  }
 </svg>
 
 <style>
@@ -114,6 +137,31 @@ const ticks = Array.from({ length: 21 }, (_, i) => 50 + i * 20);
 
   .solid {
     fill: var(--c);
+  }
+
+  .beat {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation:
+      blueprint-draw 15s ease-in-out infinite backwards,
+      blueprint-beat 2.4s ease-out infinite;
+    animation-delay: calc(var(--d) * 1s), 0s;
+  }
+
+  @keyframes blueprint-beat {
+    0%,
+    31%,
+    100% {
+      scale: 1;
+    }
+
+    6% {
+      scale: 1.35;
+    }
+
+    20% {
+      scale: 1.15;
+    }
   }
 
   .ping {
