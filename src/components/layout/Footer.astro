@@ -6,7 +6,7 @@ import { navigation, site, socials } from "@/data/site";
 import { projects } from "@/data/projects";
 
 const explore = [...navigation, { label: "FAQ", href: "/about#faq" }];
-const { address } = site;
+const { address, registration } = site;
 ---
 
 <footer class="footer" id="contact">
@@ -85,6 +85,10 @@ const { address } = site;
     </div>
 
     <div class="footer__base">
+      <p class="footer__registration">
+        Registered youth organisation · {registration.authority}, Government of Bangladesh · Reg. No.{" "}
+        <span lang="bn">{registration.number}</span> ({registration.numberEn}) · {registration.dateLabel}
+      </p>
       <span>© {new Date().getFullYear()} Youth Notion. All rights reserved.</span>
       <a href="#top">Back to top ↑</a>
     </div>
@@ -237,6 +241,11 @@ const { address } = site;
     border-top: 1px solid var(--line);
     color: var(--faint);
     font-size: 0.85rem;
+  }
+
+  .footer__registration {
+    flex-basis: 100%;
+    line-height: 1.6;
   }
 
   .footer__base a {
